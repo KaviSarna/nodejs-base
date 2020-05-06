@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <% if (htmlWebpackPlugin.options.trackJSToken) { %>
+    <!-- BEGIN TrackJS-->
+      <script type="text/javascript">window._trackJs = { token: '<%=htmlWebpackPlugin.options.trackJSToken%>' };</script>
+      <script type="text/javascript" src="https://cdn.trackjs.com/releases/current/tracker.js"></script>
+    <!-- END TrackJS-->
+    <% } %>
     <meta charset="UTF-8">
+    <!-- <script src="https://cdn.pollyfill.io/v2/pollyfill.js?features=fetch"></script> -->
   </head>
   <body>
-    <h1>Hello, World!</h1>
-    <script src="bundle.js"></script>
+    <h1>Users</h1>
+    <table>
+      <thead>
+        <th>&nbsp;</th>
+        <th>Id</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+      </thead>
+      <tbody id="users">
+
+      </tbody>
+    </table>
   </body>
 </html>

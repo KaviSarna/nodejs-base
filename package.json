@@ -4,19 +4,39 @@
   "description": "",
   "scripts": {
     "prestart": "babel-node buildScripts/startMessage.js",
-    "start": "npm-run-all --parallel open:src lint:watch test:watch",
-    "open:src": "babel-node buildScripts/srcServer.js",
+    "start": "npm-run-all --parallel open:src lint:watch test:watch start-mockapi",
+    "open:src": "nodemon --exec babel-node buildScripts/srcServer.js",
     "security-check": "npm audit",
     "localtunnel": "lt --port 4000",
     "share": "npm-run-all --parallel open:src localtunnel",
     "lint": "esw webpack.config.* src buildScripts --color",
     "lint:watch": "npm run lint -- --watch",
     "test": "mocha --reporter progress buildScripts/testSetup.js \"src/**/*.test.js\"",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "generate-mock-data": "babel-node buildScripts/generateMockData.js",
+    "prestart-mockapi": "npm run generate-mock-data",
+    "start-mockapi": "json-server --watch src/api/db.json --port 5001",
+    "clean-dist": "rimraf ./dist && mkdir dist",
+    "prebuild": "npm-run-all clean-dist test lint",
+    "build": "babel-node buildScripts/build.js",
+    "postbuild": "babel-node buildScripts/distServer.js",
+    "deploy": "surge ./dist"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": [
+      "node_modules/**/node_modules"
+    ],
+    "delay": "3000",
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": 5000
+    }
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "nodemon": "^2.0.3",
     "whatwg-fetch": "1.0.0"
   },
   "devDependencies": {
